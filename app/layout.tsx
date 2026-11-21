@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { Cinzel, Plus_Jakarta_Sans } from 'next/font/google';
 import { Providers } from '@/components/Providers';
+// @ts-expect-error Next.js handles global CSS imports; no TypeScript module declaration is needed.
 import './globals.css';
 
 const cinzel = Cinzel({
