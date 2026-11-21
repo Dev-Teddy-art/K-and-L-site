@@ -14,34 +14,41 @@ import {
   Plus,
   Minus,
   MessageSquare,
+  ZoomIn,
 } from 'lucide-react';
-import { ProductSKU } from '@/data/catalog';
+import { ProductSKU, getProductImages } from '@/data/catalog';
 import { getLocalizedProduct } from '@/data/catalogI18n';
 import { useCart } from '@/lib/cartStore';
 import { useLanguage } from '@/lib/i18n';
+import { useCurrency } from '@/lib/currencyStore';
 import { buildSingleItemOrderUrl } from '@/lib/whatsapp';
+import { ProductPhotoCarousel } from '@/components/ProductPhotoCarousel';
 
 export function ProductDetailClient({ product }: { product: ProductSKU }) {
   const [quantity, setQuantity] = useState(1);
   const [added, setAdded] = useState(false);
-  const [selectedImgUrl, setSelectedImgUrl] = useState<string | null>(null);
   const { addItem, openSimulator } = useCart();
   const { t, language } = useLanguage();
+  const { formatPrice, isHydrated } = useCurrency();
 
   const localized = getLocalizedProduct(product, language);
   const isB2B = localized.category === 'Bulk & Export' || localized.price === null;
   const totalPrice = localized.price ? localized.price * quantity : null;
+  const images = getProductImages(localized);
 
-  const images = [
-    { url: localized.dishImage || '/images/heritage_banner.jpg', label: 'Craft Blend' },
-    ...(localized.secondaryImage && localized.secondaryImage !== localized.dishImage
-      ? [{ url: localized.secondaryImage, label: 'Packaging / Detail' }]
-      : localized.pouchImage && localized.pouchImage !== localized.dishImage
-      ? [{ url: localized.pouchImage, label: 'Packaging Pouch' }]
-      : []),
-  ];
+  const unitPriceDisplay =
+    isB2B || localized.price === null
+      ? localized.priceDisplay
+      : isHydrated
+      ? formatPrice(localized.price)
+      : localized.priceDisplay;
 
-  const currentDisplayImage = selectedImgUrl || images[0].url;
+  const totalPriceDisplay =
+    totalPrice === null
+      ? localized.priceDisplay
+      : isHydrated
+      ? formatPrice(totalPrice)
+      : `₦${totalPrice.toLocaleString()}`;
 
   const handleAddToCart = () => {
     addItem(localized, quantity);
@@ -50,7 +57,13 @@ export function ProductDetailClient({ product }: { product: ProductSKU }) {
   };
 
   const handleWhatsAppOrder = () => {
-    const orderData = buildSingleItemOrderUrl(localized, quantity, language);
+    const orderData = buildSingleItemOrderUrl(
+      localized,
+      quantity,
+      language,
+      unitPriceDisplay,
+      totalPriceDisplay
+    );
     openSimulator({
       url: orderData.url,
       rawText: orderData.rawText,
@@ -62,7 +75,7 @@ export function ProductDetailClient({ product }: { product: ProductSKU }) {
     <div>
       {/* Breadcrumb Navigation */}
       <nav className="mb-8 flex items-center gap-2 text-xs text-[#35160E]/60">
-        <Link href="/" className="hover:text-[#6B1713] transition-colors flex items-center gap-1 font-medium">
+        <Link href="/" className="hover:text-[#2C5E3B] transition-colors flex items-center gap-1 font-medium">
           <ArrowLeft className="w-3.5 h-3.5" />
           <span>{t.productModal.backToCatalog}</span>
         </Link>
@@ -74,67 +87,41 @@ export function ProductDetailClient({ product }: { product: ProductSKU }) {
 
       {/* Contiguous Purchase Module Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
-        {/* Left Column: Product Dish Presentation */}
-        <div className="lg:col-span-7 space-y-6">
-          <div className="relative aspect-square sm:aspect-4/3 rounded-3xl overflow-hidden bg-[#F4ECE0] border border-[#E7DAC8] shadow-lg">
-            <img
-              src={currentDisplayImage}
-              alt={localized.name}
-              referrerPolicy="no-referrer"
-              className="w-full h-full object-cover transition-all duration-300"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent pointer-events-none" />
-
-            {/* Packaging / angle pills on top left */}
-            {images.length > 1 && (
-              <div className="absolute top-4 left-4 z-20 flex gap-1.5 bg-black/50 backdrop-blur-md p-1 rounded-xl">
-                {images.map((img, i) => (
-                  <button
-                    key={i}
-                    onClick={() => setSelectedImgUrl(img.url)}
-                    className={`px-2.5 py-1 rounded-lg text-[10px] font-semibold transition-all ${
-                      currentDisplayImage === img.url
-                        ? 'bg-[#FAF4E8] text-[#6B1713] shadow-xs'
-                        : 'text-[#FAF4E8]/85 hover:text-white'
-                    }`}
-                  >
-                    {img.label}
-                  </button>
-                ))}
-              </div>
-            )}
-
-            <div className="absolute bottom-6 left-6 right-6 flex items-end justify-between">
-              <span className="px-3.5 py-1.5 rounded-full bg-[#6B1713] text-[#FAF4E8] text-xs font-bold uppercase tracking-wider font-cinzel shadow-md">
+        {/* Left Column: Unified Studio Photo Carousel + Macro Lightbox */}
+        <div className="lg:col-span-7 space-y-5">
+          <ProductPhotoCarousel
+            key={localized.id}
+            images={images}
+            alt={localized.name}
+            packaging={localized.packaging}
+            origin={localized.origin}
+            aspectClass="aspect-square sm:aspect-4/3"
+            showThumbnails={true}
+            enableLightbox={true}
+            bottomLeftBadge={
+              <span className="px-3.5 py-1.5 rounded-full bg-[#6B1713] text-[#FAF4E8] text-xs font-bold uppercase tracking-wider font-montserrat shadow-md">
                 {localized.packaging}
               </span>
+            }
+            bottomRightBadge={
               <span className="text-xs text-[#FAF4E8] bg-black/50 backdrop-blur-md px-3 py-1.5 rounded-full font-medium">
                 {t.productModal.milledInNigeria}
               </span>
-            </div>
-          </div>
+            }
+          />
 
-          {/* Multi-angle & Pouch Thumbnails */}
-          {images.length > 1 && (
-            <div className="flex items-center gap-3">
-              {images.map((img, i) => (
-                <button
-                  key={i}
-                  onClick={() => setSelectedImgUrl(img.url)}
-                  className={`flex items-center gap-2.5 p-1.5 rounded-2xl border transition-all text-xs font-semibold ${
-                    currentDisplayImage === img.url
-                      ? 'border-[#6B1713] bg-[#FAF4E8] ring-2 ring-[#6B1713]/30 text-[#6B1713]'
-                      : 'border-[#E7DAC8] bg-[#F4ECE0] text-[#35160E]/70 hover:bg-[#FAF4E8]'
-                  }`}
-                >
-                  <div className="w-12 h-12 rounded-xl overflow-hidden shrink-0 border border-white/50">
-                    <img src={img.url} alt="" className="w-full h-full object-cover" />
-                  </div>
-                  <span className="pr-2">{img.label}</span>
-                </button>
-              ))}
+          {/* Interactive Macro & Batch Inspection Callout Strip */}
+          <div className="px-4 py-3 rounded-2xl bg-[#EBF2EC]/65 border border-[#2C5E3B]/25 flex flex-wrap items-center justify-between gap-3 text-xs text-[#21482D]">
+            <div className="flex items-center gap-2 font-medium">
+              <ZoomIn className="w-4 h-4 text-[#2C5E3B] shrink-0" />
+              <span>
+                Click product frame above to inspect 3.5x spice granulation &amp; pouch batch codes
+              </span>
             </div>
-          )}
+            <span className="font-montserrat font-bold uppercase tracking-wider text-[10px] text-[#2C5E3B]">
+              Warm Stone Studio · Macro Enabled
+            </span>
+          </div>
 
           {/* Sourcing & Provenance Card */}
           <div className="p-6 rounded-2xl bg-[#F4ECE0]/70 border border-[#E7DAC8] flex items-center justify-between">
@@ -146,7 +133,7 @@ export function ProductDetailClient({ product }: { product: ProductSKU }) {
                 {localized.origin}
               </span>
             </div>
-            <div className="p-3 rounded-full bg-[#FAF4E8] border border-[#E7DAC8] text-[#6B1713]">
+            <div className="p-3 rounded-full bg-[#EBF2EC] border border-[#2C5E3B]/25 text-[#2C5E3B]">
               <Compass className="w-5 h-5" />
             </div>
           </div>
@@ -155,10 +142,10 @@ export function ProductDetailClient({ product }: { product: ProductSKU }) {
         {/* Right Column: Sticky Contiguous Purchase Module */}
         <div className="lg:col-span-5 bg-[#FAF4E8] rounded-3xl p-6 sm:p-8 border border-[#E7DAC8] shadow-sm space-y-6 lg:sticky lg:top-28">
           <div>
-            <span className="text-xs uppercase tracking-widest text-[#6B1713] font-bold font-cinzel block mb-1">
+            <span className="text-xs uppercase tracking-widest text-[#6B1713] font-bold font-montserrat block mb-1">
               {localized.category}
             </span>
-            <h1 className="font-cinzel text-2xl sm:text-3xl font-bold text-[#35160E] leading-snug">
+            <h1 className="font-montserrat text-2xl sm:text-3xl font-bold text-[#35160E] leading-snug">
               {localized.name}
             </h1>
             <p className="text-sm text-[#35160E]/75 italic mt-1">&ldquo;{localized.subtitle}&rdquo;</p>
@@ -170,8 +157,8 @@ export function ProductDetailClient({ product }: { product: ProductSKU }) {
               <span className="text-[10px] text-[#35160E]/60 uppercase tracking-widest block font-semibold">
                 {t.productModal.unitPricing}
               </span>
-              <span className="text-2xl font-bold text-[#6B1713] tabular-nums font-cinzel">
-                {localized.priceDisplay}
+              <span className="text-2xl font-bold text-[#6B1713] tabular-nums font-montserrat">
+                {unitPriceDisplay}
               </span>
             </div>
 
@@ -204,7 +191,7 @@ export function ProductDetailClient({ product }: { product: ProductSKU }) {
 
           {/* Tasting Notes */}
           <div>
-            <span className="text-xs uppercase tracking-wider font-semibold text-[#35160E]/70 block mb-2 font-cinzel">
+            <span className="text-xs uppercase tracking-wider font-semibold text-[#35160E]/70 block mb-2 font-montserrat">
               {t.productModal.characteristics}
             </span>
             <div className="flex flex-wrap gap-1.5 mb-2">
@@ -225,13 +212,13 @@ export function ProductDetailClient({ product }: { product: ProductSKU }) {
           {/* Quantity Mutator */}
           {!isB2B && (
             <div className="flex items-center justify-between py-2 border-y border-[#E7DAC8]">
-              <span className="text-xs font-bold text-[#35160E] uppercase tracking-wider font-cinzel">
+              <span className="text-xs font-bold text-[#35160E] uppercase tracking-wider font-montserrat">
                 {t.productModal.quantity}
               </span>
               <div className="flex items-center gap-2 border border-[#E7DAC8] rounded-xl bg-white p-1">
                 <button
                   onClick={() => setQuantity((q) => Math.max(1, q - 1))}
-                  className="p-1 rounded-lg hover:bg-black/5 text-[#35160E] transition-colors"
+                  className="p-1 rounded-lg hover:bg-[#EBF2EC] hover:text-[#2C5E3B] text-[#35160E] transition-colors"
                   aria-label="Decrease quantity"
                 >
                   <Minus className="w-3.5 h-3.5" />
@@ -241,7 +228,7 @@ export function ProductDetailClient({ product }: { product: ProductSKU }) {
                 </span>
                 <button
                   onClick={() => setQuantity((q) => q + 1)}
-                  className="p-1 rounded-lg hover:bg-black/5 text-[#35160E] transition-colors"
+                  className="p-1 rounded-lg hover:bg-[#EBF2EC] hover:text-[#2C5E3B] text-[#35160E] transition-colors"
                   aria-label="Increase quantity"
                 >
                   <Plus className="w-3.5 h-3.5" />
@@ -260,18 +247,18 @@ export function ProductDetailClient({ product }: { product: ProductSKU }) {
               <span>
                 {isB2B
                   ? t.productModal.requestQuote
-                  : `${t.productModal.instantOrder} (${totalPrice ? `₦${totalPrice.toLocaleString()}` : localized.priceDisplay})`}
+                  : `${t.productModal.instantOrder} (${totalPriceDisplay})`}
               </span>
             </button>
 
             <button
               onClick={handleAddToCart}
-              className="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-xl border border-[#35160E]/20 bg-white hover:bg-[#F4ECE0] text-[#35160E] text-xs font-semibold transition-all shadow-xs"
+              className="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-xl border border-[#2C5E3B]/35 bg-[#FAF4E8] hover:bg-[#2C5E3B] hover:text-[#FAF4E8] hover:border-[#2C5E3B] text-[#2C5E3B] text-xs font-semibold transition-all shadow-xs"
             >
               {added ? (
                 <>
-                  <Check className="w-4 h-4 text-emerald-700" />
-                  <span className="text-emerald-700">{t.productModal.added}</span>
+                  <Check className="w-4 h-4" />
+                  <span>{t.productModal.added}</span>
                 </>
               ) : (
                 <>
@@ -282,7 +269,7 @@ export function ProductDetailClient({ product }: { product: ProductSKU }) {
             </button>
 
             <div className="flex items-center justify-center gap-1.5 text-[11px] text-[#35160E]/60 pt-2">
-              <ShieldCheck className="w-3.5 h-3.5 text-emerald-700" />
+              <ShieldCheck className="w-3.5 h-3.5 text-[#2C5E3B]" />
               <span>{t.hero.zeroSignup}</span>
             </div>
           </div>
@@ -311,7 +298,7 @@ export function ProductDetailClient({ product }: { product: ProductSKU }) {
           <MessageSquare className="w-4 h-4 text-emerald-300 group-hover:scale-110 transition-transform shrink-0" />
 
           <div className="flex flex-col items-start text-left leading-tight">
-            <span className="text-[10px] text-[#FAF4E8]/75 uppercase tracking-wider font-cinzel font-semibold hidden min-[360px]:block">
+            <span className="text-[10px] text-[#FAF4E8]/75 uppercase tracking-wider font-montserrat font-semibold hidden min-[360px]:block">
               {t.productModal.quickOrderDeskOnline}
             </span>
             <span className="text-xs sm:text-sm font-bold tracking-tight">
@@ -319,8 +306,8 @@ export function ProductDetailClient({ product }: { product: ProductSKU }) {
             </span>
           </div>
 
-          <span className="px-2 py-0.5 rounded-full bg-[#FAF4E8] text-[#6B1713] text-[11px] font-bold font-cinzel tabular-nums shadow-xs">
-            {totalPrice ? `₦${totalPrice.toLocaleString()}` : localized.priceDisplay}
+          <span className="px-2 py-0.5 rounded-full bg-[#FAF4E8] text-[#6B1713] text-[11px] font-bold font-montserrat tabular-nums shadow-xs">
+            {totalPriceDisplay}
           </span>
         </button>
       </motion.aside>

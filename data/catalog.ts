@@ -42,7 +42,7 @@ export const CATALOG: ProductSKU[] = [
     origin: 'Kano & Kaduna Agricultural Plains, Nigeria',
     isHero: true,
     dishImage: '/assets/aistudio/Suya_pepper_17c114ee.jpeg',
-    secondaryImage: '/assets/aistudio/Suya_pepper_17c114ee.jpeg',
+    secondaryImage: '/images/hero_suya_platter_1794402216427.jpg',
   },
   {
     id: 'sku-pepper-soup',
@@ -64,7 +64,7 @@ export const CATALOG: ProductSKU[] = [
     origin: 'Enugu & Imo Rainforest Forest Belt, Nigeria',
     isHero: true,
     dishImage: '/assets/aistudio/pepper_soup_spice_0474cc74.jpeg',
-    secondaryImage: '/assets/aistudio/pepper_soup_spice_0474cc74.jpeg',
+    secondaryImage: '/images/hero_native_soup_1794402217362.jpg',
   },
   {
     id: 'sku-yellow-habanero',
@@ -131,6 +131,7 @@ export const CATALOG: ProductSKU[] = [
     origin: 'Kaduna Valley & Cross River, Nigeria',
     isHero: true,
     dishImage: '/images/jollof_dish.jpg',
+    secondaryImage: '/images/hero_jollof_platter_1794402215839.jpg',
   },
   {
     id: 'sku-white-onion',
@@ -175,6 +176,7 @@ export const CATALOG: ProductSKU[] = [
     origin: 'Niger Delta Coastal Basin, Nigeria',
     isHero: false,
     dishImage: '/images/native_soup_dish.jpg',
+    secondaryImage: '/images/hero_native_soup_1794402217362.jpg',
   },
   {
     id: 'sku-turmeric-powder',
@@ -195,8 +197,8 @@ export const CATALOG: ProductSKU[] = [
     pairingDish: 'Golden Milk, Curries, Turmeric Infused Rice, and Wellness Tonics',
     origin: 'Kaduna State, Nigeria',
     isHero: false,
-    dishImage: '/assets/aistudio/white-onion-pouch_5e0b3978.jpg',
-    secondaryImage: '/assets/aistudio/white-onion-pouch_5e0b3978.jpg',
+    dishImage: '/images/studio_turmeric_powder_1795091037441.jpg',
+    secondaryImage: '/images/studio_turmeric_roots_1795090935336.jpg',
     pouchImage: '/assets/aistudio/white-onion-pouch_5e0b3978.jpg',
   },
   {
@@ -218,9 +220,7 @@ export const CATALOG: ProductSKU[] = [
     pairingDish: 'Meat Marinades, Jollof Enhancement, Fried Plantains (Dodo), and Stews',
     origin: 'Kano State, Nigeria',
     isHero: false,
-    dishImage: '/assets/aistudio/garlic-pouch_dae845a4.jpg',
-    secondaryImage: '/assets/aistudio/garlic-pouch_dae845a4.jpg',
-    pouchImage: '/assets/aistudio/garlic-pouch_dae845a4.jpg',
+    dishImage: '/images/studio_chilli_powder_1795090973495.jpg',
   },
   {
     id: 'sku-ginger-slices',
@@ -241,7 +241,8 @@ export const CATALOG: ProductSKU[] = [
     pairingDish: 'Ginger Extracts, Craft Ginger Beer, Herbal Teas, and Industrial Blends',
     origin: 'Southern Kaduna Ginger Belt, Nigeria',
     isHero: false,
-    dishImage: '/images/heritage_banner.jpg',
+    dishImage: '/images/studio_ginger_slices_1795091047742.jpg',
+    secondaryImage: '/images/heritage_banner.jpg',
   },
   {
     id: 'sku-white-pepper',
@@ -262,7 +263,8 @@ export const CATALOG: ProductSKU[] = [
     pairingDish: 'White Sauces, Cream Soups, Charcuterie, and Fine Dining Broths',
     origin: 'Cross River Rainforest, Nigeria',
     isHero: false,
-    dishImage: '/images/heritage_banner.jpg',
+    dishImage: '/images/studio_white_pepper_1795091066928.jpg',
+    secondaryImage: '/images/heritage_banner.jpg',
   },
   {
     id: 'sku-black-pepper',
@@ -283,7 +285,8 @@ export const CATALOG: ProductSKU[] = [
     pairingDish: 'Universal Grinding, Pickling Spice, Dry Rubs, and Seasoning Mixes',
     origin: 'Cross River Forest Reserves, Nigeria',
     isHero: false,
-    dishImage: '/images/heritage_banner.jpg',
+    dishImage: '/images/studio_black_pepper_1795091066765.jpg',
+    secondaryImage: '/images/heritage_banner.jpg',
   },
   {
     id: 'sku-turmeric-roots',
@@ -304,6 +307,95 @@ export const CATALOG: ProductSKU[] = [
     pairingDish: 'Industrial Extraction, Natural Dye Processing, and Bulk Grinding',
     origin: 'Kaduna & Nassarawa, Nigeria',
     isHero: false,
-    dishImage: '/images/heritage_banner.jpg',
+    dishImage: '/images/studio_turmeric_roots_1795090935336.jpg',
+    secondaryImage: '/images/spices_heritage_banner_1794402217794.jpg',
   },
 ];
+
+export interface ProductImageSlide {
+  url: string;
+  label: string;
+  backdrop?: 'studio' | 'cutout' | 'pouch' | 'dish';
+  note?: string;
+}
+
+function classifyBackdrop(url: string): 'studio' | 'cutout' | 'pouch' | 'dish' {
+  if (
+    url.includes('pepper_soup_spice_0474cc74') ||
+    url.includes('habanero_pepper_de25c925') ||
+    url.includes('Garlic__24cc6674')
+  ) {
+    return 'cutout';
+  }
+  if (url.includes('pouch')) {
+    return 'pouch';
+  }
+  if (url.includes('hero_') || url.includes('_dish')) {
+    return 'dish';
+  }
+  return 'studio';
+}
+
+export function getProductImages(product: ProductSKU): ProductImageSlide[] {
+  const primaryUrl = product.dishImage || '/images/heritage_banner.jpg';
+  const primaryBackdrop = classifyBackdrop(primaryUrl);
+
+  const candidates: ProductImageSlide[] = [
+    {
+      url: primaryUrl,
+      label:
+        product.category === 'Bulk & Export'
+          ? 'Harvest Commodity'
+          : primaryBackdrop === 'pouch'
+          ? '100g Pouch & Batch Label'
+          : 'Open Bowl Studio',
+      backdrop: primaryBackdrop,
+      note:
+        primaryBackdrop === 'pouch'
+          ? 'Zoom up to 3.5x to inspect sealed pouch stitching, batch number (BN), and production/expiry dates.'
+          : 'Inspect grain uniformity, stone-milled texture, and natural spice oils in studio macro mode.',
+    },
+  ];
+
+  if (product.secondaryImage) {
+    const secBackdrop = classifyBackdrop(product.secondaryImage);
+    const label =
+      secBackdrop === 'pouch'
+        ? '100g Sealed Pouch'
+        : product.secondaryImage.includes('Habanero_pepper_2')
+        ? 'Whole Peppers'
+        : product.secondaryImage.includes('studio_turmeric_roots')
+        ? 'Raw Cured Roots'
+        : secBackdrop === 'dish'
+        ? 'Culinary Dish'
+        : 'Macro & Origin';
+
+    candidates.push({
+      url: product.secondaryImage,
+      label,
+      backdrop: secBackdrop,
+      note:
+        secBackdrop === 'dish'
+          ? 'Finished culinary pairing plated with small-batch K&L stone-milled spice blends.'
+          : 'Raw botanical origin view showing natural color intensity prior to milling.',
+    });
+  }
+
+  if (product.pouchImage) {
+    candidates.push({
+      url: product.pouchImage,
+      label: '100g Batch Pouch',
+      backdrop: 'pouch',
+      note: 'Zoom in to verify heat-sealed barrier pouch, batch traceability code (BN), PD, and best-before stamps.',
+    });
+  }
+
+  // Deduplicate by URL preserving first label
+  const seen = new Set<string>();
+  return candidates.filter((item) => {
+    if (!item.url || seen.has(item.url)) return false;
+    seen.add(item.url);
+    return true;
+  });
+}
+

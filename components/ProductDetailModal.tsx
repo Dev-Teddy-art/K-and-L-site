@@ -3,11 +3,13 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { X, Flame, ShoppingBag, Send, Compass, Check } from 'lucide-react';
-import { ProductSKU } from '@/data/catalog';
+import { ProductSKU, getProductImages } from '@/data/catalog';
 import { getLocalizedProduct } from '@/data/catalogI18n';
 import { useCart } from '@/lib/cartStore';
 import { useLanguage } from '@/lib/i18n';
+import { useCurrency } from '@/lib/currencyStore';
 import { buildSingleItemOrderUrl } from '@/lib/whatsapp';
+import { ProductPhotoCarousel } from '@/components/ProductPhotoCarousel';
 
 export function ProductDetailModal({
   product,
@@ -18,24 +20,21 @@ export function ProductDetailModal({
 }) {
   const { addItem, openSimulator } = useCart();
   const { t, language } = useLanguage();
+  const { formatPrice, isHydrated } = useCurrency();
   const [added, setAdded] = React.useState(false);
-  const [selectedImgUrl, setSelectedImgUrl] = React.useState<string | null>(null);
 
   if (!product) return null;
 
   const localized = getLocalizedProduct(product, language);
   const isB2B = localized.category === 'Bulk & Export' || localized.price === null;
+  const images = getProductImages(localized);
 
-  const images = [
-    { url: localized.dishImage || '/images/heritage_banner.jpg', label: 'Craft Blend' },
-    ...(localized.secondaryImage && localized.secondaryImage !== localized.dishImage
-      ? [{ url: localized.secondaryImage, label: 'Packaging / Detail' }]
-      : localized.pouchImage && localized.pouchImage !== localized.dishImage
-      ? [{ url: localized.pouchImage, label: 'Packaging Pouch' }]
-      : []),
-  ];
-
-  const currentDisplayImage = selectedImgUrl || images[0].url;
+  const displayPrice =
+    isB2B || localized.price === null
+      ? localized.priceDisplay
+      : isHydrated
+      ? formatPrice(localized.price)
+      : localized.priceDisplay;
 
   const handleAddToCart = () => {
     addItem(localized, 1);
@@ -44,7 +43,7 @@ export function ProductDetailModal({
   };
 
   const handleWhatsAppOrder = () => {
-    const orderData = buildSingleItemOrderUrl(localized, 1, language);
+    const orderData = buildSingleItemOrderUrl(localized, 1, language, displayPrice, displayPrice);
     openSimulator({
       url: orderData.url,
       rawText: orderData.rawText,
@@ -74,51 +73,35 @@ export function ProductDetailModal({
           {/* Close button */}
           <button
             onClick={onClose}
-            className="absolute top-4 right-4 z-20 p-2 rounded-full bg-white/80 hover:bg-white text-[#35160E] shadow-sm transition-colors"
+            className="absolute top-6 right-6 z-30 p-2 rounded-full bg-white/90 hover:bg-white text-[#35160E] shadow-md border border-[#E7DAC8] transition-colors"
             aria-label="Close modal"
           >
             <X className="w-5 h-5" />
           </button>
 
           <div className="overflow-y-auto">
-            {/* Top Image Showcase */}
-            <div className="relative h-64 sm:h-72 w-full bg-[#F4ECE0] overflow-hidden">
-              <img
-                src={currentDisplayImage}
+            {/* Top Image Carousel Showcase */}
+            <div className="p-4 pb-0 sm:p-5 sm:pb-0">
+              <ProductPhotoCarousel
+                key={localized.id}
+                images={images}
                 alt={localized.name}
-                referrerPolicy="no-referrer"
-                className="w-full h-full object-cover transition-all duration-300"
+                packaging={localized.packaging}
+                origin={localized.origin}
+                aspectClass="h-64 sm:h-72"
+                showThumbnails={images.length > 1}
+                enableLightbox={true}
+                bottomLeftBadge={
+                  <span className="px-3 py-1 rounded-full bg-[#6B1713] text-[#FAF4E8] text-xs font-semibold uppercase tracking-wider font-montserrat shadow-sm">
+                    {localized.category}
+                  </span>
+                }
+                bottomRightBadge={
+                  <span className="text-lg sm:text-xl font-bold text-[#6B1713] tabular-nums bg-[#FAF4E8]/95 px-3 py-1 rounded-xl font-montserrat border border-[#E7DAC8] shadow-sm">
+                    {displayPrice}
+                  </span>
+                }
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#FAF4E8] via-transparent to-transparent pointer-events-none" />
-
-              {/* Multi-angle / Packaging image pills */}
-              {images.length > 1 && (
-                <div className="absolute top-4 left-4 z-20 flex gap-1.5 bg-black/50 backdrop-blur-md p-1 rounded-xl">
-                  {images.map((img, i) => (
-                    <button
-                      key={i}
-                      onClick={() => setSelectedImgUrl(img.url)}
-                      className={`px-2.5 py-1 rounded-lg text-[10px] font-semibold transition-all ${
-                        currentDisplayImage === img.url
-                          ? 'bg-[#FAF4E8] text-[#6B1713] shadow-xs'
-                          : 'text-[#FAF4E8]/85 hover:text-white'
-                      }`}
-                    >
-                      {img.label}
-                    </button>
-                  ))}
-                </div>
-              )}
-
-              <div className="absolute bottom-4 left-6 right-6 flex items-end justify-between">
-                <span className="px-3 py-1 rounded-full bg-[#6B1713] text-[#FAF4E8] text-xs font-semibold uppercase tracking-wider font-cinzel shadow-sm">
-                  {localized.category}
-                </span>
-
-                <span className="text-xl sm:text-2xl font-bold text-[#6B1713] tabular-nums bg-[#FAF4E8]/90 px-3 py-1 rounded-xl font-cinzel border border-[#E7DAC8]">
-                  {localized.priceDisplay}
-                </span>
-              </div>
             </div>
 
             {/* Body */}
@@ -127,7 +110,7 @@ export function ProductDetailModal({
                 <span className="text-xs text-[#35160E]/60 block mb-1">
                   {t.productModal.packagingLabel}: {localized.packaging} · {t.productModal.commercialFocus}: {localized.commercialTarget}
                 </span>
-                <h3 className="font-cinzel text-2xl sm:text-3xl font-bold text-[#35160E]">
+                <h3 className="font-montserrat text-2xl sm:text-3xl font-bold text-[#35160E]">
                   {localized.name}
                 </h3>
                 <p className="text-sm text-[#35160E]/80 italic mt-1">&ldquo;{localized.subtitle}&rdquo;</p>
@@ -161,7 +144,7 @@ export function ProductDetailModal({
                     {t.productModal.nativeOrigin}
                   </span>
                   <div className="flex items-center gap-1 mt-1 text-xs font-semibold text-[#35160E]">
-                    <Compass className="w-3.5 h-3.5 text-[#6B1713]" />
+                    <Compass className="w-3.5 h-3.5 text-[#2C5E3B]" />
                     <span>{localized.origin}</span>
                   </div>
                 </div>
@@ -169,7 +152,7 @@ export function ProductDetailModal({
 
               {/* Detailed Description */}
               <div>
-                <span className="text-xs uppercase tracking-wider font-semibold text-[#35160E]/70 block mb-1.5 font-cinzel">
+                <span className="text-xs uppercase tracking-wider font-semibold text-[#35160E]/70 block mb-1.5 font-montserrat">
                   {t.productModal.craftMilling}
                 </span>
                 <p className="text-sm text-[#35160E]/90 leading-relaxed">
@@ -179,7 +162,7 @@ export function ProductDetailModal({
 
               {/* Aroma & Tasting Notes */}
               <div>
-                <span className="text-xs uppercase tracking-wider font-semibold text-[#35160E]/70 block mb-2 font-cinzel">
+                <span className="text-xs uppercase tracking-wider font-semibold text-[#35160E]/70 block mb-2 font-montserrat">
                   {t.productModal.characteristics}
                 </span>
                 <div className="flex flex-wrap gap-2 mb-3">
@@ -199,7 +182,7 @@ export function ProductDetailModal({
 
               {/* Culinary Pairing */}
               <div className="p-3.5 rounded-xl bg-[#F4ECE0]/60 border border-[#E7DAC8] text-xs text-[#35160E]/85">
-                <span className="font-bold text-[#35160E] block mb-0.5 font-cinzel">
+                <span className="font-bold text-[#35160E] block mb-0.5 font-montserrat">
                   {t.productModal.culinaryApp}
                 </span>
                 {localized.pairingDish}
@@ -215,18 +198,18 @@ export function ProductDetailModal({
                   <span>
                     {isB2B
                       ? t.productModal.requestQuote
-                      : `${t.productModal.instantOrder} (${localized.priceDisplay})`}
+                      : `${t.productModal.instantOrder} (${displayPrice})`}
                   </span>
                 </button>
 
                 <button
                   onClick={handleAddToCart}
-                  className="w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl border border-[#35160E]/20 bg-white hover:bg-[#F4ECE0] text-[#35160E] text-xs font-semibold transition-all"
+                  className="w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl border border-[#2C5E3B]/35 bg-[#FAF4E8] hover:bg-[#2C5E3B] hover:text-[#FAF4E8] hover:border-[#2C5E3B] text-[#2C5E3B] text-xs font-semibold transition-all"
                 >
                   {added ? (
                     <>
-                      <Check className="w-3.5 h-3.5 text-emerald-700" />
-                      <span className="text-emerald-700">{t.productModal.added}</span>
+                      <Check className="w-3.5 h-3.5" />
+                      <span>{t.productModal.added}</span>
                     </>
                   ) : (
                     <>

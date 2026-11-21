@@ -120,16 +120,16 @@ export function WhatsAppSimulator() {
             <div className="grid grid-cols-2 gap-2">
               <button
                 onClick={handleCopyText}
-                className="flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-xl border border-[#E7DAC8] bg-white hover:bg-[#F4ECE0] text-[#35160E] text-xs font-semibold transition-all shadow-sm"
+                className="flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-xl border border-[#2C5E3B]/30 bg-white hover:bg-[#EBF2EC] hover:text-[#2C5E3B] hover:border-[#2C5E3B]/50 text-[#35160E] text-xs font-semibold transition-all shadow-sm"
               >
                 {copiedText ? (
                   <>
-                    <Check className="w-3.5 h-3.5 text-emerald-700" />
-                    <span className="text-emerald-700">{t.simulator.messageCopied}</span>
+                    <Check className="w-3.5 h-3.5 text-[#2C5E3B]" />
+                    <span className="text-[#2C5E3B]">{t.simulator.messageCopied}</span>
                   </>
                 ) : (
                   <>
-                    <Copy className="w-3.5 h-3.5" />
+                    <Copy className="w-3.5 h-3.5 text-[#2C5E3B]" />
                     <span>{t.simulator.copyMessage}</span>
                   </>
                 )}
@@ -137,16 +137,16 @@ export function WhatsAppSimulator() {
 
               <button
                 onClick={handleCopyUrl}
-                className="flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-xl border border-[#E7DAC8] bg-white hover:bg-[#F4ECE0] text-[#35160E] text-xs font-semibold transition-all shadow-sm"
+                className="flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-xl border border-[#2C5E3B]/30 bg-white hover:bg-[#EBF2EC] hover:text-[#2C5E3B] hover:border-[#2C5E3B]/50 text-[#35160E] text-xs font-semibold transition-all shadow-sm"
               >
                 {copiedUrl ? (
                   <>
-                    <Check className="w-3.5 h-3.5 text-emerald-700" />
-                    <span className="text-emerald-700">{t.simulator.linkCopied}</span>
+                    <Check className="w-3.5 h-3.5 text-[#2C5E3B]" />
+                    <span className="text-[#2C5E3B]">{t.simulator.linkCopied}</span>
                   </>
                 ) : (
                   <>
-                    <ExternalLink className="w-3.5 h-3.5" />
+                    <ExternalLink className="w-3.5 h-3.5 text-[#2C5E3B]" />
                     <span>{t.simulator.copyLink}</span>
                   </>
                 )}
@@ -155,7 +155,7 @@ export function WhatsAppSimulator() {
 
             <button
               onClick={handleLaunchWhatsApp}
-              className="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-emerald-700 text-white font-semibold text-xs sm:text-sm shadow-md hover:bg-emerald-800 active:scale-[0.99] transition-all"
+              className="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-[#2C5E3B] text-white font-semibold text-xs sm:text-sm shadow-md hover:bg-[#21482D] active:scale-[0.99] transition-all"
             >
               <MessageCircle className="w-4 h-4" />
               <span>{t.simulator.launchButton}</span>

@@ -68,7 +68,7 @@ export function CartDrawer() {
                   />
                 </div>
                 <div>
-                  <h2 className="font-cinzel text-lg font-bold text-[#35160E]">
+                  <h2 className="font-montserrat text-lg font-bold text-[#35160E]">
                     {t.cart.title}
                   </h2>
                   <p className="text-xs text-[#35160E]/70">
@@ -93,7 +93,7 @@ export function CartDrawer() {
                   <div className="w-16 h-16 rounded-full bg-[#F4ECE0] border border-[#E7DAC8] flex items-center justify-center text-[#35160E]/40 mb-4">
                     <ShoppingBag className="w-8 h-8" />
                   </div>
-                  <h3 className="font-cinzel text-base font-bold text-[#35160E] mb-1">
+                  <h3 className="font-montserrat text-base font-bold text-[#35160E] mb-1">
                     {t.cart.emptyTitle}
                   </h3>
                   <p className="text-xs text-[#35160E]/60 max-w-xs mb-6">
@@ -130,13 +130,13 @@ export function CartDrawer() {
 
                         {/* Details */}
                         <div className="flex-1 min-w-0 pr-2">
-                          <h4 className="font-cinzel text-xs font-bold text-[#35160E] truncate">
+                          <h4 className="font-montserrat text-xs font-bold text-[#35160E] truncate">
                             {localized.name}
                           </h4>
                           <span className="text-[10px] text-[#35160E]/60 block">
                             {localized.packaging}
                           </span>
-                          <span className="text-xs font-semibold text-[#6B1713] tabular-nums font-cinzel">
+                          <span className="text-xs font-semibold text-[#6B1713] tabular-nums font-montserrat">
                             {isB2B ? t.catalog.quoteButton : formatPrice(itemTotal)}
                           </span>
                         </div>
@@ -145,7 +145,7 @@ export function CartDrawer() {
                         <div className="flex items-center gap-1.5 border border-[#E7DAC8] rounded-xl bg-white p-1 shadow-xs shrink-0">
                           <button
                             onClick={() => updateQuantity(item.product.id, item.quantity - 1)}
-                            className="p-1 rounded-lg hover:bg-black/5 text-[#35160E] transition-colors"
+                            className="p-1 rounded-lg hover:bg-[#EBF2EC] hover:text-[#2C5E3B] text-[#35160E] transition-colors"
                             aria-label="Decrease quantity"
                           >
                             <Minus className="w-3 h-3" />
@@ -155,7 +155,7 @@ export function CartDrawer() {
                           </span>
                           <button
                             onClick={() => updateQuantity(item.product.id, item.quantity + 1)}
-                            className="p-1 rounded-lg hover:bg-black/5 text-[#35160E] transition-colors"
+                            className="p-1 rounded-lg hover:bg-[#EBF2EC] hover:text-[#2C5E3B] text-[#35160E] transition-colors"
                             aria-label="Increase quantity"
                           >
                             <Plus className="w-3 h-3" />
@@ -181,7 +181,7 @@ export function CartDrawer() {
                 <div className="pt-5 mt-4">
                   <label
                     htmlFor="customer-note"
-                    className="block text-xs font-semibold text-[#35160E] uppercase tracking-wider mb-2 font-cinzel"
+                    className="block text-xs font-semibold text-[#35160E] uppercase tracking-wider mb-2 font-montserrat"
                   >
                     {t.cart.deliveryNotes}
                   </label>
@@ -207,11 +207,11 @@ export function CartDrawer() {
                   </div>
                   <div className="flex items-center justify-between text-xs text-[#35160E]/75">
                     <span>{t.cart.dispatchLabel}</span>
-                    <span className="text-emerald-800 font-medium">{t.cart.dispatchValue}</span>
+                    <span className="text-[#2C5E3B] font-semibold">{t.cart.dispatchValue}</span>
                   </div>
                   <div className="flex items-center justify-between text-base font-bold text-[#35160E] pt-2 border-t border-[#E7DAC8]">
-                    <span className="font-cinzel">{t.cart.estimatedTotal}</span>
-                    <span className="text-[#6B1713] tabular-nums font-cinzel text-lg">
+                    <span className="font-montserrat">{t.cart.estimatedTotal}</span>
+                    <span className="text-[#6B1713] tabular-nums font-montserrat text-lg">
                       {formatPrice(subtotal, true)}
                     </span>
                   </div>
@@ -234,7 +234,7 @@ export function CartDrawer() {
                     {t.cart.clearBag}
                   </button>
                   <div className="flex items-center gap-1">
-                    <ShieldCheck className="w-3.5 h-3.5 text-emerald-700" />
+                    <ShieldCheck className="w-3.5 h-3.5 text-[#2C5E3B]" />
                     <span>{t.cart.routingNotice} {DISPLAY_PHONE_NUMBER}</span>
                   </div>
                 </div>

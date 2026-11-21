@@ -16,6 +16,8 @@ export interface TranslationDictionary {
     heritage: string;
     wholesale: string;
     giftBox: string;
+    media: string;
+    about: string;
     fulfillmentDesk: string;
     orderBag: string;
   };
@@ -47,6 +49,14 @@ export interface TranslationDictionary {
     commercial: string;
     orderButton: string;
     quoteButton: string;
+    viewCarousel: string;
+    viewGrid: string;
+    viewFullDetails: string;
+    previousProduct: string;
+    nextProduct: string;
+    productOf: string;
+    aromaLabel: string;
+    photoAngle: string;
   };
   cart: {
     title: string;
@@ -160,6 +170,34 @@ export interface TranslationDictionary {
     addToBag: string;
     addedToBag: string;
   };
+  about: {
+    kicker: string;
+    title: string;
+    subtitle: string;
+    learnAboutUs: string;
+    coreValues: string;
+    managementTeam: string;
+    boardOfDirectors: string;
+    explorePage: string;
+    overviewLink: string;
+    backToAbout: string;
+  };
+  media: {
+    kicker: string;
+    title: string;
+    subtitle: string;
+    reelsHeading: string;
+    reelsSubheading: string;
+    recipesHeading: string;
+    recipesSubheading: string;
+    harvestHeading: string;
+    harvestSubheading: string;
+    addAllToBag: string;
+    addedAll: string;
+    orderRecipeKit: string;
+    spicesUsed: string;
+    watchReel: string;
+  };
 }
 
 export const TRANSLATIONS: Record<Language, TranslationDictionary> = {
@@ -175,6 +213,8 @@ export const TRANSLATIONS: Record<Language, TranslationDictionary> = {
       heritage: 'Milling Heritage',
       wholesale: 'Export & B2B',
       giftBox: 'Gift Box Studio',
+      media: 'Media & Kitchen',
+      about: 'About Us',
       fulfillmentDesk: 'Fulfillment Desk',
       orderBag: 'Order Bag',
     },
@@ -208,6 +248,14 @@ export const TRANSLATIONS: Record<Language, TranslationDictionary> = {
       commercial: 'Commercial',
       orderButton: 'Order',
       quoteButton: 'Quote',
+      viewCarousel: 'Carousel View',
+      viewGrid: 'Grid View',
+      viewFullDetails: 'Full Product Page',
+      previousProduct: 'Previous',
+      nextProduct: 'Next',
+      productOf: 'of',
+      aromaLabel: 'Aroma Profile',
+      photoAngle: 'Swipe angles',
     },
     cart: {
       title: 'Your Spice Bag',
@@ -324,6 +372,39 @@ export const TRANSLATIONS: Record<Language, TranslationDictionary> = {
       addToBag: 'Add Gift Box to Bag',
       addedToBag: 'Gift Box Added!',
     },
+    about: {
+      kicker: 'Corporate Heritage & Governance',
+      title: 'Inside K&L Spices',
+      subtitle:
+        'Explore our farm-to-stone-mill story, non-negotiable purity values, operational leadership, and the governance board stewarding K&L Spices across West Africa and global markets.',
+      learnAboutUs: 'Learn About Us',
+      coreValues: 'Our Core Values',
+      managementTeam: 'Management Team',
+      boardOfDirectors: 'Board of Directors',
+      explorePage: 'Read Full Page',
+      overviewLink: 'About Overview',
+      backToAbout: 'Back to Home',
+    },
+    media: {
+      kicker: 'Culinary Studio & Origin Archive',
+      title: 'Media & Shoppable Kitchen',
+      subtitle:
+        'Short vertical prep reels, harvest-to-stone-mill origin clips, and chef recipes linked directly to our catalog—tap once to load every spice into your order bag.',
+      reelsHeading: '15-Second Prep & Milling Reels',
+      reelsSubheading:
+        'Click any vertical story reel to play timed cooking & milling cues and shop the exact blends featured.',
+      recipesHeading: 'Shoppable Chef Recipes',
+      recipesSubheading:
+        'Step-by-step West African signatures with exact K&L spice dosages and one-tap kit ordering.',
+      harvestHeading: 'Harvest & Stone-Milling Documentary',
+      harvestSubheading:
+        'Behind the scenes of our sub-28°C granite milling and solar curing hubs across Nigeria.',
+      addAllToBag: 'Add All Spices to Bag',
+      addedAll: 'Spices Added to Bag!',
+      orderRecipeKit: 'Order Kit via WhatsApp',
+      spicesUsed: 'K&L Spices Used in This Recipe',
+      watchReel: 'Watch Prep Reel',
+    },
   },
   de: {
     topRibbon: {
@@ -337,6 +418,8 @@ export const TRANSLATIONS: Record<Language, TranslationDictionary> = {
       heritage: 'Mahlerbe',
       wholesale: 'Export & B2B',
       giftBox: 'Geschenkbox-Studio',
+      media: 'Medien & Küche',
+      about: 'Über uns',
       fulfillmentDesk: 'Kundenservice',
       orderBag: 'Warenkorb',
     },
@@ -370,6 +453,14 @@ export const TRANSLATIONS: Record<Language, TranslationDictionary> = {
       commercial: 'Großgebinde',
       orderButton: 'Bestellen',
       quoteButton: 'Angebot',
+      viewCarousel: 'Karussell-Ansicht',
+      viewGrid: 'Raster-Ansicht',
+      viewFullDetails: 'Zur Produktseite',
+      previousProduct: 'Zurück',
+      nextProduct: 'Weiter',
+      productOf: 'von',
+      aromaLabel: 'Aromaprofil',
+      photoAngle: 'Ansichten wechseln',
     },
     cart: {
       title: 'Ihr Gewürz-Warenkorb',
@@ -486,6 +577,36 @@ export const TRANSLATIONS: Record<Language, TranslationDictionary> = {
       addToBag: 'Geschenkbox in den Warenkorb',
       addedToBag: 'Geschenkbox hinzugefügt!',
     },
+    about: {
+      kicker: 'Unternehmen & Verantwortung',
+      title: 'Über K&L Spices',
+      subtitle:
+        'Erfahren Sie mehr über unsere Herkunft von der Ernte bis zur Steinmühle, unsere Reinheitswerte, die operative Führung sowie den Verwaltungsrat von K&L Spices.',
+      learnAboutUs: 'Über uns erfahren',
+      coreValues: 'Unsere Grundwerte',
+      managementTeam: 'Management-Team',
+      boardOfDirectors: 'Verwaltungsrat',
+      explorePage: 'Mehr erfahren',
+      overviewLink: 'Übersicht Über uns',
+      backToAbout: 'Zurück zur Startseite',
+    },
+    media: {
+      kicker: 'Kulinarik-Studio & Herkunftsarchiv',
+      title: 'Medien & Shoppable Küche',
+      subtitle:
+        'Kurze Zubereitungs-Reels, Einblicke in die Steinmühle unter 28°C und Chefkoch-Rezepte direkt mit unserem Sortiment verknüpft.',
+      reelsHeading: '15-Sekunden Koch- & Mühlen-Reels',
+      reelsSubheading: 'Klicken Sie auf ein Hochformat-Reel, um Kochschritte abzuspielen und die verwendeten Gewürze direkt zu bestellen.',
+      recipesHeading: 'Direkt bestellbare Rezepte',
+      recipesSubheading: 'Authentische westafrikanische Klassiker mit exakter Gewürzdosierung und Ein-Klick-Warenkorb.',
+      harvestHeading: 'Ernte & Steinmahl-Dokumentation',
+      harvestSubheading: 'Hinter den Kulissen unserer Sonnentrocknung und Kaltvermahlung in Nigeria.',
+      addAllToBag: 'Alle Gewürze in den Warenkorb',
+      addedAll: 'In den Warenkorb gelegt!',
+      orderRecipeKit: 'Set via WhatsApp bestellen',
+      spicesUsed: 'Verwendete K&L Gewürze',
+      watchReel: 'Reel ansehen',
+    },
   },
   fr: {
     topRibbon: {
@@ -499,6 +620,8 @@ export const TRANSLATIONS: Record<Language, TranslationDictionary> = {
       heritage: 'Héritage Artisanal',
       wholesale: 'Export & B2B',
       giftBox: 'Studio Coffret Cadeau',
+      media: 'Médias & Cuisine',
+      about: 'À Propos',
       fulfillmentDesk: 'Service Client',
       orderBag: 'Panier',
     },
@@ -532,6 +655,14 @@ export const TRANSLATIONS: Record<Language, TranslationDictionary> = {
       commercial: 'Commercial',
       orderButton: 'Commander',
       quoteButton: 'Devis',
+      viewCarousel: 'Vue Carrousel',
+      viewGrid: 'Vue Grille',
+      viewFullDetails: 'Fiche Complète',
+      previousProduct: 'Précédent',
+      nextProduct: 'Suivant',
+      productOf: 'sur',
+      aromaLabel: 'Profil Aromatique',
+      photoAngle: 'Changer de vue',
     },
     cart: {
       title: 'Votre Panier d’Épices',
@@ -647,6 +778,36 @@ export const TRANSLATIONS: Record<Language, TranslationDictionary> = {
       orderWhatsApp: 'Commander le Coffret sur WhatsApp',
       addToBag: 'Ajouter le Coffret au Panier',
       addedToBag: 'Coffret Ajouté !',
+    },
+    about: {
+      kicker: 'Maison & Gouvernance',
+      title: 'Découvrir K&L Spices',
+      subtitle:
+        'Découvrez notre histoire de la récolte à la meule de pierre, nos valeurs de pureté absolue, l’équipe dirigeante et le conseil d’administration de K&L Spices.',
+      learnAboutUs: 'À Propos de Nous',
+      coreValues: 'Nos Valeurs Fondamentales',
+      managementTeam: 'Équipe de Direction',
+      boardOfDirectors: 'Conseil d’Administration',
+      explorePage: 'Découvrir la page',
+      overviewLink: 'Aperçu À Propos',
+      backToAbout: 'Retour à l’accueil',
+    },
+    media: {
+      kicker: 'Studio Culinaire & Archives d’Origine',
+      title: 'Médias & Cuisine Connectée',
+      subtitle:
+        'Courtes vidéos verticales de préparation, séquences de meunerie sur pierre et recettes de chefs reliées au catalogue en un clic.',
+      reelsHeading: 'Reels de Préparation 15s & Meunerie',
+      reelsSubheading: 'Cliquez sur une capsule vidéo pour suivre les gestes culinaires et ajouter chaque épice au panier.',
+      recipesHeading: 'Recettes de Chefs Achetables',
+      recipesSubheading: 'Classiques ouest-africains étape par étape avec dosages exacts et ajout groupé au panier.',
+      harvestHeading: 'Récolte & Meunerie sur Pierre',
+      harvestSubheading: 'Immersion au cœur du séchage solaire et du broyage à froid sous 28°C au Nigeria.',
+      addAllToBag: 'Tout Ajouter au Panier',
+      addedAll: 'Ajouté au Panier !',
+      orderRecipeKit: 'Commander le Kit sur WhatsApp',
+      spicesUsed: 'Épices K&L Utilisées',
+      watchReel: 'Lire le Reel',
     },
   },
 };

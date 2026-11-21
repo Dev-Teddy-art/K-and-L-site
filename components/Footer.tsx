@@ -7,6 +7,7 @@ import { useLanguage } from '@/lib/i18n';
 import { LanguageSwitcher } from '@/components/LanguageSwitcher';
 import { CurrencySwitcher } from '@/components/CurrencySwitcher';
 import { DISPLAY_PHONE_NUMBER } from '@/lib/whatsapp';
+import { ABOUT_SUBPAGES } from '@/data/about';
 
 export function Footer() {
   const { t } = useLanguage();
@@ -20,7 +21,7 @@ export function Footer() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-12 gap-8 mb-12">
           {/* Brand info */}
-          <div className="md:col-span-5 space-y-4">
+          <div className="md:col-span-4 space-y-4">
             <Link
               href="/"
               className="inline-flex items-center gap-3 group"
@@ -30,7 +31,7 @@ export function Footer() {
                 alt="K&L Logo"
                 className="h-14 sm:h-16 w-auto object-contain transition-transform group-hover:scale-105"
               />
-              <span className="font-cinzel text-2xl font-bold tracking-widest text-[#35160E] group-hover:text-[#6B1713] transition-colors">
+              <span className="font-montserrat text-2xl font-bold tracking-widest text-[#35160E] group-hover:text-[#6B1713] transition-colors">
                 SPICES
               </span>
             </Link>
@@ -50,37 +51,58 @@ export function Footer() {
           </div>
 
           {/* Quick Nav */}
-          <div className="md:col-span-3 space-y-3">
-            <h4 className="font-cinzel text-xs font-bold uppercase tracking-wider text-[#6B1713]">
+          <div className="md:col-span-2 space-y-3">
+            <h4 className="font-montserrat text-xs font-bold uppercase tracking-wider text-[#6B1713]">
               {t.footer.navHeading}
             </h4>
             <ul className="text-xs space-y-2 text-[#35160E]/80 font-medium">
               <li>
-                <a href="#tasting-stage" className="hover:text-[#6B1713] transition-colors">
+                <Link href="/#tasting-stage" className="hover:text-[#2C5E3B] transition-colors">
                   {t.nav.tastingStage}
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#catalog" className="hover:text-[#6B1713] transition-colors">
+                <Link href="/#catalog" className="hover:text-[#2C5E3B] transition-colors">
                   {t.nav.catalog}
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#heritage" className="hover:text-[#6B1713] transition-colors">
+                <Link href="/media" className="hover:text-[#2C5E3B] transition-colors">
+                  {t.nav.media}
+                </Link>
+              </li>
+              <li>
+                <Link href="/#heritage" className="hover:text-[#2C5E3B] transition-colors">
                   {t.nav.heritage}
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#wholesale" className="hover:text-[#6B1713] transition-colors">
+                <Link href="/#wholesale" className="hover:text-[#2C5E3B] transition-colors">
                   {t.nav.wholesale}
-                </a>
+                </Link>
               </li>
+            </ul>
+          </div>
+
+          {/* About & Governance Sub-Pages */}
+          <div className="md:col-span-2 space-y-3">
+            <h4 className="font-montserrat text-xs font-bold uppercase tracking-wider text-[#6B1713]">
+              {t.nav.about}
+            </h4>
+            <ul className="text-xs space-y-2 text-[#35160E]/80 font-medium">
+              {ABOUT_SUBPAGES.map((sub) => (
+                <li key={sub.slug}>
+                  <Link href={sub.href} className="hover:text-[#2C5E3B] transition-colors">
+                    {t.about[sub.key]}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
 
           {/* Commercial Tiers */}
           <div className="md:col-span-4 space-y-3">
-            <h4 className="font-cinzel text-xs font-bold uppercase tracking-wider text-[#6B1713]">
+            <h4 className="font-montserrat text-xs font-bold uppercase tracking-wider text-[#6B1713]">
               {t.footer.tiersHeading}
             </h4>
             <div className="text-xs text-[#35160E]/75 space-y-2">
@@ -111,7 +133,7 @@ export function Footer() {
           </div>
           <button
             onClick={scrollToTop}
-            className="inline-flex items-center gap-1.5 hover:text-[#6B1713] transition-colors font-medium"
+            className="inline-flex items-center gap-1.5 hover:text-[#2C5E3B] transition-colors font-medium"
           >
             <span>{t.footer.backToTop}</span>
             <ArrowUp className="w-3.5 h-3.5" />

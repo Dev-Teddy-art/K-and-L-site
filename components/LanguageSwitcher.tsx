@@ -82,8 +82,8 @@ export function LanguageSwitcher({
               aria-pressed={isActive}
               className={`px-2.5 py-1 text-xs font-semibold rounded-lg transition-all duration-200 whitespace-nowrap shrink-0 ${
                 isActive
-                  ? 'bg-[#6B1713] text-[#FAF4E8] shadow-xs'
-                  : 'text-[#35160E]/75 hover:text-[#35160E] hover:bg-black/5'
+                  ? 'bg-[#2C5E3B] text-[#FAF4E8] shadow-xs'
+                  : 'text-[#35160E]/75 hover:text-[#2C5E3B] hover:bg-[#EBF2EC]'
               }`}
               title={`${lang.native} (${lang.label})`}
             >
@@ -104,13 +104,13 @@ export function LanguageSwitcher({
         onClick={() => setIsOpen((prev) => !prev)}
         aria-expanded={isOpen}
         aria-haspopup="listbox"
-        className={`inline-flex items-center gap-1 sm:gap-1.5 px-2 sm:px-2.5 py-1.5 sm:py-2 text-xs font-semibold rounded-xl border border-[#E7DAC8] bg-[#FAF4E8] hover:bg-[#F4ECE0] text-[#35160E] transition-all shadow-xs focus:outline-hidden focus:ring-2 focus:ring-[#6B1713]/20 shrink-0 ${
-          isOpen ? 'ring-2 ring-[#6B1713]/25 bg-[#F4ECE0]' : ''
+        className={`inline-flex items-center gap-1 sm:gap-1.5 px-2 sm:px-2.5 py-1.5 sm:py-2 text-xs font-semibold rounded-xl border border-[#E7DAC8] bg-[#FAF4E8] hover:bg-[#EBF2EC]/70 hover:border-[#2C5E3B]/40 text-[#35160E] transition-all shadow-xs focus:outline-hidden focus:ring-2 focus:ring-[#2C5E3B]/25 shrink-0 ${
+          isOpen ? 'ring-2 ring-[#2C5E3B]/25 bg-[#EBF2EC]/70 border-[#2C5E3B]/40' : ''
         }`}
         title={`Current Language: ${activeOption.native}. Click to change.`}
       >
-        <Globe className="w-3.5 h-3.5 text-[#6B1713] shrink-0" aria-hidden="true" />
-        <span className="font-cinzel tracking-wider uppercase">{activeOption.short}</span>
+        <Globe className="w-3.5 h-3.5 text-[#2C5E3B] shrink-0" aria-hidden="true" />
+        <span className="font-montserrat tracking-wider uppercase">{activeOption.short}</span>
         <ChevronDown
           className={`w-2.5 sm:w-3 h-2.5 sm:h-3 text-[#35160E]/60 transition-transform duration-200 shrink-0 ${
             isOpen ? 'rotate-180' : ''
@@ -126,7 +126,7 @@ export function LanguageSwitcher({
           aria-label="Select language"
           className="absolute right-0 mt-1.5 w-44 rounded-2xl bg-[#FAF4E8] border border-[#E7DAC8] shadow-xl p-1.5 z-50 animate-in fade-in zoom-in-95 duration-150 backdrop-blur-md"
         >
-          <div className="px-2.5 py-1 text-[10px] font-semibold text-[#35160E]/50 uppercase tracking-wider font-cinzel border-b border-[#E7DAC8]/60 mb-1">
+          <div className="px-2.5 py-1 text-[10px] font-semibold text-[#35160E]/50 uppercase tracking-wider font-montserrat border-b border-[#E7DAC8]/60 mb-1">
             Language / Langue / Sprache
           </div>
 
@@ -140,8 +140,8 @@ export function LanguageSwitcher({
                 onClick={() => handleSelect(lang.code)}
                 className={`w-full flex items-center justify-between px-2.5 py-2 rounded-xl text-xs transition-colors text-left ${
                   isSelected
-                    ? 'bg-[#6B1713] text-[#FAF4E8] font-semibold shadow-xs'
-                    : 'text-[#35160E] hover:bg-[#F4ECE0] font-medium'
+                    ? 'bg-[#2C5E3B] text-[#FAF4E8] font-semibold shadow-xs'
+                    : 'text-[#35160E] hover:bg-[#EBF2EC] hover:text-[#2C5E3B] font-medium'
                 }`}
               >
                 <div className="flex items-center gap-2">

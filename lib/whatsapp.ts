@@ -15,7 +15,9 @@ export interface CartItem {
 export function buildSingleItemOrderUrl(
   product: ProductSKU,
   quantity: number = 1,
-  lang: Language = 'en'
+  lang: Language = 'en',
+  formattedUnitPrice?: string,
+  formattedTotalPrice?: string
 ): {
   url: string;
   rawText: string;
@@ -23,26 +25,39 @@ export function buildSingleItemOrderUrl(
   const isB2B = product.category === 'Bulk & Export' || product.price === null;
   const total = (product.price || 0) * quantity;
 
+  const baseUnitNgn = `₦${product.price?.toLocaleString()}`;
+  const baseTotalNgn = `₦${total.toLocaleString()}`;
+  const unitDisplay =
+    formattedUnitPrice && formattedUnitPrice !== baseUnitNgn
+      ? `${formattedUnitPrice} (${baseUnitNgn})`
+      : baseUnitNgn;
+  const totalDisplay =
+    formattedTotalPrice && formattedTotalPrice !== baseTotalNgn
+      ? `${formattedTotalPrice} (${baseTotalNgn})`
+      : formattedUnitPrice && quantity === 1 && formattedUnitPrice !== baseUnitNgn
+      ? `${formattedUnitPrice} (${baseTotalNgn})`
+      : baseTotalNgn;
+
   let rawText = '';
 
   if (lang === 'de') {
     if (isB2B) {
       rawText = `Hallo K&L Spices! 🌿\n\nIch möchte Großhandelspreise anfragen für:\n• Produkt: *${product.name}* (${product.packaging})\n• Benötigte Menge: ${quantity} Einheit(en)\n• Lieferort / Hafen:\n\nBitte senden Sie Ihre aktuellen FOB/Door-Tarife. Vielen Dank!`;
     } else {
-      rawText = `Hallo K&L Spices! 🌿\n\nIch möchte bestellen:\n• Produkt: *${product.name}* (${product.packaging})\n• Menge: ${quantity}\n• Stückpreis: ₦${product.price?.toLocaleString()}\n• Gesamtbetrag: *₦${total.toLocaleString()}*\n\nBitte bestätigen Sie die Verfügbarkeit und Versanddetails für meine Adresse:`;
+      rawText = `Hallo K&L Spices! 🌿\n\nIch möchte bestellen:\n• Produkt: *${product.name}* (${product.packaging})\n• Menge: ${quantity}\n• Stückpreis: ${unitDisplay}\n• Gesamtbetrag: *${totalDisplay}*\n\nBitte bestätigen Sie die Verfügbarkeit und Versanddetails für meine Adresse:`;
     }
   } else if (lang === 'fr') {
     if (isB2B) {
       rawText = `Bonjour K&L Spices ! 🌿\n\nJe souhaite demander un devis de gros pour :\n• Produit : *${product.name}* (${product.packaging})\n• Volume requis : ${quantity} unité(s)\n• Destination / Port :\n\nMerci de me transmettre vos tarifs actuels FOB/Port. Cordialement !`;
     } else {
-      rawText = `Bonjour K&L Spices ! 🌿\n\nJe souhaite commander :\n• Produit : *${product.name}* (${product.packaging})\n• Quantité : ${quantity}\n• Prix unitaire : ₦${product.price?.toLocaleString()}\n• Total estimé : *₦${total.toLocaleString()}*\n\nMerci de confirmer la disponibilité et les modalités de livraison à mon adresse :`;
+      rawText = `Bonjour K&L Spices ! 🌿\n\nJe souhaite commander :\n• Produit : *${product.name}* (${product.packaging})\n• Quantité : ${quantity}\n• Prix unitaire : ${unitDisplay}\n• Total estimé : *${totalDisplay}*\n\nMerci de confirmer la disponibilité et les modalités de livraison à mon adresse :`;
     }
   } else {
     // English default
     if (isB2B) {
       rawText = `Hello K&L Spices! 🌿\n\nI want to request wholesale/bulk pricing for:\n• Product: *${product.name}* (${product.packaging})\n• Quantity Requirement: ${quantity} Unit(s)\n• Destination / Location:\n\nPlease share your current FOB/Door delivery rate card. Thank you!`;
     } else {
-      rawText = `Hello K&L Spices! 🌿\n\nI want to order:\n• Product: *${product.name}* (${product.packaging})\n• Quantity: ${quantity}\n• Unit Price: ₦${product.price?.toLocaleString()}\n• Estimated Total: *₦${total.toLocaleString()}*\n\nPlease confirm product availability and delivery dispatch details to my address:`;
+      rawText = `Hello K&L Spices! 🌿\n\nI want to order:\n• Product: *${product.name}* (${product.packaging})\n• Quantity: ${quantity}\n• Unit Price: ${unitDisplay}\n• Estimated Total: *${totalDisplay}*\n\nPlease confirm product availability and delivery dispatch details to my address:`;
     }
   }
 

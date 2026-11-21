@@ -6,6 +6,7 @@ import { LuxuryHero } from '@/components/LuxuryHero';
 import { AnimatedCatalog } from '@/components/AnimatedCatalog';
 import { CustomSpiceBox } from '@/components/CustomSpiceBox';
 import { BrandHeritage } from '@/components/BrandHeritage';
+import { AboutSection } from '@/components/AboutSection';
 import { Footer } from '@/components/Footer';
 import { CartDrawer } from '@/components/CartDrawer';
 import { WhatsAppSimulator } from '@/components/WhatsAppSimulator';
@@ -33,6 +34,9 @@ export default function HomePage() {
 
         {/* Section 4: Heritage Stone-Milling & B2B Commodity Export Desk */}
         <BrandHeritage />
+
+        {/* Section 5: Corporate Story, Core Values, Management Team & Board of Directors */}
+        <AboutSection />
       </main>
 
       {/* Footer */}

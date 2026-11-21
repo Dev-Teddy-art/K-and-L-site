@@ -164,12 +164,12 @@ export function CustomSpiceBox() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-12 sm:mb-16">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full border border-[#E7DAC8] bg-[#F4ECE0] text-[#6B1713] text-xs font-semibold tracking-widest uppercase mb-3 font-cinzel">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full border border-[#E7DAC8] bg-[#F4ECE0] text-[#6B1713] text-xs font-semibold tracking-widest uppercase mb-3 font-montserrat">
             <Gift className="w-3.5 h-3.5 text-[#6B1713]" />
             <span>{t.customBox.kicker}</span>
           </div>
 
-          <h2 className="font-cinzel text-3xl sm:text-4xl lg:text-5xl font-bold text-[#35160E] tracking-tight leading-tight">
+          <h2 className="font-montserrat text-3xl sm:text-4xl lg:text-5xl font-bold text-[#35160E] tracking-tight leading-tight">
             {t.customBox.title}
           </h2>
 
@@ -192,7 +192,7 @@ export function CustomSpiceBox() {
                   transition={{ type: 'spring', stiffness: 350, damping: 28 }}
                 />
               )}
-              <span className="font-cinzel">{t.customBox.trioTitle} (3 Jars)</span>
+              <span className="font-montserrat">{t.customBox.trioTitle} (3 Jars)</span>
             </button>
 
             <button
@@ -208,7 +208,7 @@ export function CustomSpiceBox() {
                   transition={{ type: 'spring', stiffness: 350, damping: 28 }}
                 />
               )}
-              <span className="font-cinzel">{t.customBox.vaultTitle} (5 Jars)</span>
+              <span className="font-montserrat">{t.customBox.vaultTitle} (5 Jars)</span>
             </button>
           </div>
         </div>
@@ -221,10 +221,10 @@ export function CustomSpiceBox() {
               {/* Box Header & Pricing Line */}
               <div className="flex flex-wrap items-center justify-between gap-3 pb-6 border-b border-[#E7DAC8]">
                 <div>
-                  <span className="text-[11px] font-semibold uppercase tracking-widest text-[#6B1713] font-cinzel block">
+                  <span className="text-[11px] font-semibold uppercase tracking-widest text-[#6B1713] font-montserrat block">
                     {boxFormat === 'trio' ? 'Sampler Box' : 'Master Collection'}
                   </span>
-                  <h3 className="font-cinzel text-xl sm:text-2xl font-bold text-[#35160E]">
+                  <h3 className="font-montserrat text-xl sm:text-2xl font-bold text-[#35160E]">
                     {boxFormat === 'trio' ? t.customBox.trioTitle : t.customBox.vaultTitle}
                   </h3>
                 </div>
@@ -234,11 +234,11 @@ export function CustomSpiceBox() {
                     <span className="text-xs text-[#35160E]/50 line-through tabular-nums">
                       {formatPrice(currentConfig.retailNgn)}
                     </span>
-                    <span className="text-2xl font-bold text-[#6B1713] tabular-nums font-cinzel">
+                    <span className="text-2xl font-bold text-[#6B1713] tabular-nums font-montserrat">
                       {formatPrice(currentConfig.priceNgn)}
                     </span>
                   </div>
-                  <span className="inline-block text-[10px] font-bold text-emerald-800 bg-emerald-100/80 px-2 py-0.5 rounded-md mt-0.5">
+                  <span className="inline-block text-[10px] font-bold text-[#2C5E3B] bg-[#EBF2EC] border border-[#2C5E3B]/20 px-2 py-0.5 rounded-md mt-0.5">
                     {t.customBox.saveBadge}
                   </span>
                 </div>
@@ -246,10 +246,10 @@ export function CustomSpiceBox() {
 
               {/* Progress & Slot Status Indicator */}
               <div className="py-4 flex items-center justify-between text-xs text-[#35160E]/75">
-                <span className="font-semibold font-cinzel">
+                <span className="font-semibold font-montserrat">
                   {t.customBox.slotsLabel}: {selectedSpices.length} / {maxSlots}
                 </span>
-                <span className={isFull ? 'text-emerald-700 font-bold' : 'text-[#6B1713] font-medium'}>
+                <span className={isFull ? 'text-[#2C5E3B] font-bold' : 'text-[#6B1713] font-medium'}>
                   {isFull
                     ? `✓ ${t.customBox.boxComplete}`
                     : `${remainingSlots} ${t.customBox.spicesRemaining}`}
@@ -299,7 +299,7 @@ export function CustomSpiceBox() {
                           </div>
 
                           <div className="text-center w-full">
-                            <h4 className="font-cinzel text-[11px] sm:text-xs font-bold text-[#35160E] truncate">
+                            <h4 className="font-montserrat text-[11px] sm:text-xs font-bold text-[#35160E] truncate">
                               {localizedSpice.name}
                             </h4>
                             <div className="flex items-center justify-center gap-1 mt-0.5">
@@ -315,7 +315,7 @@ export function CustomSpiceBox() {
                           <div className="w-9 h-9 rounded-full border border-dashed border-[#E7DAC8] flex items-center justify-center mb-1">
                             <Plus className="w-4 h-4 text-[#35160E]/50" />
                           </div>
-                          <span className="text-[10px] font-semibold font-cinzel">
+                          <span className="text-[10px] font-semibold font-montserrat">
                             Slot {slotIdx + 1}
                           </span>
                         </div>
@@ -348,12 +348,12 @@ export function CustomSpiceBox() {
               <button
                 onClick={handleAddToCart}
                 disabled={selectedSpices.length === 0}
-                className="w-full flex items-center justify-center gap-2 py-3 px-6 rounded-xl border border-[#35160E]/20 bg-white hover:bg-[#F4ECE0] text-[#35160E] text-xs font-semibold shadow-xs disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+                className="w-full flex items-center justify-center gap-2 py-3 px-6 rounded-xl border border-[#2C5E3B]/35 bg-[#FAF4E8] hover:bg-[#2C5E3B] hover:text-[#FAF4E8] hover:border-[#2C5E3B] text-[#2C5E3B] text-xs font-semibold shadow-xs disabled:opacity-50 disabled:cursor-not-allowed transition-all"
               >
                 {addedNotice ? (
                   <>
-                    <Check className="w-4 h-4 text-emerald-700" />
-                    <span className="text-emerald-700">{t.customBox.addedToBag}</span>
+                    <Check className="w-4 h-4" />
+                    <span>{t.customBox.addedToBag}</span>
                   </>
                 ) : (
                   <>
@@ -370,7 +370,7 @@ export function CustomSpiceBox() {
             {/* Spice Picker Tray */}
             <div className="bg-[#FAF4E8] rounded-3xl p-6 sm:p-7 border border-[#E7DAC8] shadow-sm">
               <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
-                <h4 className="font-cinzel text-base font-bold text-[#35160E]">
+                <h4 className="font-montserrat text-base font-bold text-[#35160E]">
                   {t.customBox.chooseBlends}
                 </h4>
 
@@ -382,8 +382,8 @@ export function CustomSpiceBox() {
                       onClick={() => setActiveSpiceFilter(filter)}
                       className={`px-2.5 py-1 rounded-lg text-[11px] font-semibold transition-colors ${
                         activeSpiceFilter === filter
-                          ? 'bg-[#6B1713] text-[#FAF4E8]'
-                          : 'bg-[#F4ECE0] text-[#35160E]/70 hover:text-[#35160E]'
+                          ? 'bg-[#2C5E3B] text-[#FAF4E8]'
+                          : 'bg-[#F4ECE0] text-[#35160E]/75 hover:bg-[#EBF2EC] hover:text-[#2C5E3B]'
                       }`}
                     >
                       {filter}
@@ -401,7 +401,7 @@ export function CustomSpiceBox() {
                   return (
                     <div
                       key={spice.id}
-                      className="p-3 rounded-2xl bg-[#F4ECE0]/80 border border-[#E7DAC8] flex items-center justify-between gap-3 hover:bg-[#F4ECE0] transition-colors"
+                      className="p-3 rounded-2xl bg-[#F4ECE0]/80 border border-[#E7DAC8] flex items-center justify-between gap-3 hover:bg-[#EBF2EC]/45 hover:border-[#2C5E3B]/40 transition-colors"
                     >
                       <div className="flex items-center gap-2.5 min-w-0">
                         <div className="w-11 h-11 rounded-full overflow-hidden border border-[#E7DAC8] shrink-0">
@@ -414,7 +414,7 @@ export function CustomSpiceBox() {
                         </div>
 
                         <div className="min-w-0">
-                          <h5 className="font-cinzel text-xs font-bold text-[#35160E] truncate">
+                          <h5 className="font-montserrat text-xs font-bold text-[#35160E] truncate">
                             {localized.name}
                           </h5>
                           <span className="text-[10px] text-[#35160E]/60 block truncate">
@@ -429,7 +429,7 @@ export function CustomSpiceBox() {
                         className={`p-2 rounded-xl border text-xs font-semibold transition-all shrink-0 ${
                           isFull
                             ? 'opacity-40 cursor-not-allowed bg-[#FAF4E8] border-[#E7DAC8]'
-                            : 'bg-[#6B1713] text-[#FAF4E8] hover:bg-[#55120F] shadow-xs active:scale-95'
+                            : 'bg-[#2C5E3B] border-[#2C5E3B] text-[#FAF4E8] hover:bg-[#21482D] shadow-xs active:scale-95'
                         }`}
                         title={isFull ? 'Box full' : `Add ${localized.name} to box`}
                       >
@@ -445,7 +445,7 @@ export function CustomSpiceBox() {
             <div className="bg-[#FAF4E8] rounded-3xl p-6 sm:p-7 border border-[#E7DAC8] shadow-sm space-y-4">
               <div className="flex items-center gap-2">
                 <Scroll className="w-4 h-4 text-[#6B1713]" />
-                <h4 className="font-cinzel text-sm sm:text-base font-bold text-[#35160E]">
+                <h4 className="font-montserrat text-sm sm:text-base font-bold text-[#35160E]">
                   {t.customBox.giftCardHeading}
                 </h4>
               </div>
@@ -453,7 +453,7 @@ export function CustomSpiceBox() {
               <div>
                 <label
                   htmlFor="gift-recipient"
-                  className="block text-[11px] font-semibold uppercase tracking-wider text-[#35160E]/70 mb-1 font-cinzel"
+                  className="block text-[11px] font-semibold uppercase tracking-wider text-[#35160E]/70 mb-1 font-montserrat"
                 >
                   Recipient
                 </label>
@@ -470,7 +470,7 @@ export function CustomSpiceBox() {
               <div>
                 <label
                   htmlFor="gift-message"
-                  className="block text-[11px] font-semibold uppercase tracking-wider text-[#35160E]/70 mb-1 font-cinzel"
+                  className="block text-[11px] font-semibold uppercase tracking-wider text-[#35160E]/70 mb-1 font-montserrat"
                 >
                   Calligraphy Message
                 </label>

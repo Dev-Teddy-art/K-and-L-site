@@ -1,21 +1,13 @@
 import type { Metadata } from 'next';
-import { Cinzel, Plus_Jakarta_Sans } from 'next/font/google';
+import { Montserrat } from 'next/font/google';
 import { Providers } from '@/components/Providers';
-// @ts-expect-error Next.js handles global CSS imports; no TypeScript module declaration is needed.
 import './globals.css';
 
-const cinzel = Cinzel({
+const montserrat = Montserrat({
   subsets: ['latin'],
-  variable: '--font-cinzel',
+  variable: '--font-montserrat',
   display: 'swap',
-  weight: ['400', '600', '700', '800'],
-});
-
-const jakarta = Plus_Jakarta_Sans({
-  subsets: ['latin'],
-  variable: '--font-jakarta',
-  display: 'swap',
-  weight: ['400', '500', '600', '700'],
+  weight: ['400', '500', '600', '700', '800'],
 });
 
 export const metadata: Metadata = {
@@ -112,7 +104,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${cinzel.variable} ${jakarta.variable} scroll-smooth`}>
+    <html lang="en" className={`${montserrat.variable} scroll-smooth`}>
       <head>
         <script
           type="application/ld+json"

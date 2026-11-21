@@ -2,12 +2,14 @@
 
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Flame, ShoppingBag, Send, ArrowRight, RotateCw, Sparkles, Check, Compass, ShieldCheck } from 'lucide-react';
-import { CATALOG, ProductSKU } from '@/data/catalog';
+import { Flame, ShoppingBag, Send, ArrowRight, RotateCw, Sparkles, Check, Compass, ShieldCheck, ZoomIn } from 'lucide-react';
+import { CATALOG, getProductImages } from '@/data/catalog';
 import { getLocalizedProduct } from '@/data/catalogI18n';
 import { useCart } from '@/lib/cartStore';
 import { useLanguage } from '@/lib/i18n';
+import { useCurrency } from '@/lib/currencyStore';
 import { buildSingleItemOrderUrl } from '@/lib/whatsapp';
+import { ProductMacroLightbox } from '@/components/ProductMacroLightbox';
 
 // Filter hero spices (Signature Blends)
 const HERO_SPICES = CATALOG.filter((s) => s.isHero);
@@ -17,12 +19,25 @@ export function LuxuryHero() {
   const [rotationAngle, setRotationAngle] = useState(0);
   const [viewMode, setViewMode] = useState<'primary' | 'secondary'>('primary');
   const [addedNotice, setAddedNotice] = useState(false);
+  const [lightboxOpen, setLightboxOpen] = useState(false);
 
   const { addItem, openSimulator, setIsCartOpen } = useCart();
   const { t, language } = useLanguage();
+  const { formatPrice, isHydrated } = useCurrency();
 
   const rawSpice = HERO_SPICES[selectedIndex];
   const currentSpice = getLocalizedProduct(rawSpice, language);
+  const currentSlides = getProductImages(currentSpice);
+  const activeSlide =
+    viewMode === 'secondary' && currentSlides.length > 1
+      ? currentSlides[1]
+      : currentSlides[0];
+  const displayPrice =
+    currentSpice.price === null
+      ? currentSpice.priceDisplay
+      : isHydrated
+      ? formatPrice(currentSpice.price)
+      : currentSpice.priceDisplay;
 
   const stepAngle = 360 / HERO_SPICES.length;
 
@@ -42,7 +57,7 @@ export function LuxuryHero() {
   };
 
   const handleDirectWhatsAppBuy = () => {
-    const orderData = buildSingleItemOrderUrl(currentSpice, 1, language);
+    const orderData = buildSingleItemOrderUrl(currentSpice, 1, language, displayPrice, displayPrice);
     openSimulator({
       url: orderData.url,
       rawText: orderData.rawText,
@@ -78,7 +93,7 @@ export function LuxuryHero() {
             <Sparkles className="w-3.5 h-3.5 text-[#6B1713]" />
             <span>{t.hero.kicker}</span>
           </div>
-          <h1 className="font-cinzel text-2xl min-[380px]:text-3xl sm:text-5xl lg:text-6xl font-bold text-[#35160E] tracking-tight leading-[1.15] text-balance">
+          <h1 className="font-montserrat text-2xl min-[380px]:text-3xl sm:text-5xl lg:text-6xl font-bold text-[#35160E] tracking-tight leading-[1.15] text-balance">
             {t.hero.title}
           </h1>
           <p className="mt-4 text-sm sm:text-base md:text-lg text-[#35160E]/80 max-w-2xl mx-auto leading-relaxed">
@@ -122,7 +137,7 @@ export function LuxuryHero() {
                     className={`absolute hidden md:flex items-center justify-center w-11 h-11 rounded-full transition-all duration-300 transform -translate-x-1/2 -translate-y-1/2 z-20 ${
                       isSelected
                         ? 'bg-[#6B1713] text-[#FAF4E8] ring-4 ring-[#FAF4E8] shadow-lg scale-110'
-                        : 'bg-[#F4ECE0] text-[#35160E] border border-[#E7DAC8] hover:bg-[#FAF4E8] hover:scale-105'
+                        : 'bg-[#F4ECE0] text-[#35160E] border border-[#E7DAC8] hover:bg-[#EBF2EC] hover:border-[#2C5E3B]/50 hover:text-[#2C5E3B] hover:scale-105'
                     }`}
                     style={{
                       left: `calc(50% + ${leftOffset}px)`,
@@ -130,7 +145,7 @@ export function LuxuryHero() {
                     }}
                     title={`Select ${localizedItem.name}`}
                   >
-                    <span className="text-xs font-bold font-cinzel">{idx + 1}</span>
+                    <span className="text-xs font-bold font-montserrat">{idx + 1}</span>
                   </button>
                 );
               })}
@@ -147,7 +162,11 @@ export function LuxuryHero() {
                 }}
               >
                 {/* Earthenware Plate Rim Texture */}
-                <div className="w-full h-full rounded-full overflow-hidden border-3 sm:border-4 border-[#FAF4E8] relative shadow-inner">
+                <div
+                  onClick={() => setLightboxOpen(true)}
+                  title="Click to inspect in 3.5x Macro Studio Lightbox"
+                  className="w-full h-full rounded-full overflow-hidden border-3 sm:border-4 border-[#FAF4E8] relative shadow-inner bg-[radial-gradient(circle_at_center,#FAF4E8_0%,#EFE5D4_70%,#E4D5BF_100%)] cursor-zoom-in group"
+                >
                   <AnimatePresence mode="wait">
                     <motion.div
                       key={`${currentSpice.id}-${viewMode}`}
@@ -155,7 +174,9 @@ export function LuxuryHero() {
                       animate={{ opacity: 1, scale: 1 }}
                       exit={{ opacity: 0, scale: 1.04 }}
                       transition={{ duration: 0.35 }}
-                      className="w-full h-full relative"
+                      className={`w-full h-full relative flex items-center justify-center ${
+                        activeSlide?.backdrop === 'cutout' ? 'p-5 sm:p-8' : ''
+                      }`}
                     >
                       <img
                         src={
@@ -165,12 +186,22 @@ export function LuxuryHero() {
                         }
                         alt={currentSpice.name}
                         referrerPolicy="no-referrer"
-                        className="w-full h-full object-cover rounded-full"
+                        className={
+                          activeSlide?.backdrop === 'cutout'
+                            ? 'w-full h-full object-contain mix-blend-multiply drop-shadow-[0_12px_20px_rgba(53,22,14,0.16)]'
+                            : 'w-full h-full object-cover rounded-full'
+                        }
                       />
                       {/* Gentle ceramic glaze sheen overlay */}
                       <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-transparent via-white/10 to-transparent pointer-events-none" />
                     </motion.div>
                   </AnimatePresence>
+
+                  {/* Subtle Macro Zoom hover cue */}
+                  <div className="pointer-events-none absolute bottom-3 left-1/2 -translate-x-1/2 inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-black/55 backdrop-blur-md text-[#FAF4E8] text-[10px] font-bold uppercase tracking-wider font-montserrat opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
+                    <ZoomIn className="w-3 h-3" />
+                    <span>Macro Zoom</span>
+                  </div>
                 </div>
               </motion.div>
             </div>
@@ -182,8 +213,8 @@ export function LuxuryHero() {
                   onClick={() => setViewMode('primary')}
                   className={`px-3 py-1 rounded-full transition-all ${
                     viewMode === 'primary'
-                      ? 'bg-[#6B1713] text-[#FAF4E8] shadow-xs'
-                      : 'text-[#35160E]/70 hover:text-[#35160E]'
+                      ? 'bg-[#2C5E3B] text-[#FAF4E8] shadow-xs'
+                      : 'text-[#35160E]/70 hover:text-[#2C5E3B]'
                   }`}
                 >
                   Authentic Blend
@@ -192,8 +223,8 @@ export function LuxuryHero() {
                   onClick={() => setViewMode('secondary')}
                   className={`px-3 py-1 rounded-full transition-all ${
                     viewMode === 'secondary'
-                      ? 'bg-[#6B1713] text-[#FAF4E8] shadow-xs'
-                      : 'text-[#35160E]/70 hover:text-[#35160E]'
+                      ? 'bg-[#2C5E3B] text-[#FAF4E8] shadow-xs'
+                      : 'text-[#35160E]/70 hover:text-[#2C5E3B]'
                   }`}
                 >
                   Detail & Pouch
@@ -205,19 +236,19 @@ export function LuxuryHero() {
             <div className="flex items-center gap-4 mt-5">
               <button
                 onClick={() => handleManualRotate('ccw')}
-                className="p-2.5 rounded-full border border-[#E7DAC8] bg-[#FAF4E8] text-[#35160E] hover:bg-[#F4ECE0] active:scale-95 transition-all shadow-sm"
+                className="p-2.5 rounded-full border border-[#E7DAC8] bg-[#FAF4E8] text-[#35160E] hover:bg-[#EBF2EC] hover:border-[#2C5E3B]/50 hover:text-[#2C5E3B] active:scale-95 transition-all shadow-sm"
                 aria-label="Rotate previous spice"
               >
                 <RotateCw className="w-4 h-4 transform -scale-x-100" />
               </button>
 
-              <span className="text-xs uppercase tracking-widest text-[#35160E]/70 font-semibold font-cinzel">
+              <span className="text-xs uppercase tracking-widest text-[#35160E]/70 font-semibold font-montserrat">
                 {t.hero.blendIndex} {selectedIndex + 1} / {HERO_SPICES.length}
               </span>
 
               <button
                 onClick={() => handleManualRotate('cw')}
-                className="p-2.5 rounded-full border border-[#E7DAC8] bg-[#FAF4E8] text-[#35160E] hover:bg-[#F4ECE0] active:scale-95 transition-all shadow-sm"
+                className="p-2.5 rounded-full border border-[#E7DAC8] bg-[#FAF4E8] text-[#35160E] hover:bg-[#EBF2EC] hover:border-[#2C5E3B]/50 hover:text-[#2C5E3B] active:scale-95 transition-all shadow-sm"
                 aria-label="Rotate next spice"
               >
                 <RotateCw className="w-4 h-4" />
@@ -235,14 +266,18 @@ export function LuxuryHero() {
                     className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-all ${
                       selectedIndex === idx
                         ? 'bg-[#6B1713] text-[#FAF4E8] shadow-sm ring-2 ring-[#6B1713]/30 scale-105'
-                        : 'bg-[#F4ECE0] text-[#35160E]/80 border border-[#E7DAC8] hover:bg-[#FAF4E8]'
+                        : 'bg-[#F4ECE0] text-[#35160E]/80 border border-[#E7DAC8] hover:bg-[#EBF2EC]/70 hover:border-[#2C5E3B]/45 hover:text-[#2C5E3B]'
                     }`}
                   >
-                    <span className="w-4 h-4 rounded-full overflow-hidden shrink-0 border border-white/50 block">
+                    <span className="w-4 h-4 rounded-full overflow-hidden shrink-0 border border-white/50 block bg-[#EFE5D4]">
                       <img
                         src={spice.dishImage || '/images/jollof_dish.jpg'}
                         alt=""
-                        className="w-full h-full object-cover"
+                        className={`w-full h-full object-cover ${
+                          getProductImages(spice)[0]?.backdrop === 'cutout'
+                            ? 'mix-blend-multiply'
+                            : ''
+                        }`}
                       />
                     </span>
                     <span>{localizedThumbnail.name.split(' ')[0]}</span>
@@ -264,14 +299,14 @@ export function LuxuryHero() {
               >
                 {/* Category & Packaging Line */}
                 <div className="flex items-center justify-between text-xs text-[#35160E]/60 mb-2 font-medium">
-                  <span className="text-[#6B1713] font-bold tracking-wider uppercase font-cinzel">
+                  <span className="text-[#6B1713] font-bold tracking-wider uppercase font-montserrat">
                     {currentSpice.category}
                   </span>
                   <span>{currentSpice.packaging}</span>
                 </div>
 
                 {/* SKU Name & Subtitle */}
-                <h2 className="font-cinzel text-2xl sm:text-3xl font-bold text-[#35160E] leading-snug">
+                <h2 className="font-montserrat text-2xl sm:text-3xl font-bold text-[#35160E] leading-snug">
                   {currentSpice.name}
                 </h2>
                 <p className="text-sm text-[#35160E]/80 mt-1 italic">
@@ -284,8 +319,8 @@ export function LuxuryHero() {
                     <span className="block text-[10px] text-[#35160E]/60 uppercase tracking-widest font-semibold">
                       {t.hero.standardJar}
                     </span>
-                    <span className="text-2xl font-bold text-[#6B1713] tabular-nums font-cinzel">
-                      {currentSpice.priceDisplay}
+                    <span className="text-2xl font-bold text-[#6B1713] tabular-nums font-montserrat">
+                      {displayPrice}
                     </span>
                   </div>
 
@@ -318,7 +353,7 @@ export function LuxuryHero() {
 
                 {/* Synchronized Tasting Notes Pills */}
                 <div className="mb-5">
-                  <span className="block text-xs uppercase tracking-wider font-semibold text-[#35160E]/70 mb-2 font-cinzel">
+                  <span className="block text-xs uppercase tracking-wider font-semibold text-[#35160E]/70 mb-2 font-montserrat">
                     {t.hero.flavorNotes}
                   </span>
                   <div className="flex flex-wrap gap-1.5">
@@ -335,7 +370,7 @@ export function LuxuryHero() {
 
                 {/* Culinary Pairing Suggestion */}
                 <div className="p-3.5 rounded-xl bg-[#F4ECE0]/50 border border-[#E7DAC8] text-xs text-[#35160E]/80 mb-6">
-                  <span className="font-bold text-[#35160E] block mb-0.5 font-cinzel">
+                  <span className="font-bold text-[#35160E] block mb-0.5 font-montserrat">
                     {t.hero.pairing}
                   </span>
                   {currentSpice.pairingDish}
@@ -343,7 +378,7 @@ export function LuxuryHero() {
 
                 {/* Origin / Provenance */}
                 <div className="flex items-center gap-2 text-xs text-[#35160E]/70 mb-6">
-                  <Compass className="w-3.5 h-3.5 text-[#6B1713]" />
+                  <Compass className="w-3.5 h-3.5 text-[#2C5E3B]" />
                   <span>{t.hero.origin}: {currentSpice.origin}</span>
                 </div>
               </motion.div>
@@ -356,18 +391,18 @@ export function LuxuryHero() {
                 className="w-full flex items-center justify-center gap-2 py-3.5 px-6 rounded-2xl bg-[#6B1713] text-[#FAF4E8] font-semibold text-sm shadow-md hover:bg-[#55120F] active:scale-[0.99] transition-all group"
               >
                 <Send className="w-4 h-4 text-[#FAF4E8] group-hover:translate-x-0.5 transition-transform" />
-                <span>{t.hero.instantBuy} ({currentSpice.priceDisplay})</span>
+                <span>{t.hero.instantBuy} ({displayPrice})</span>
               </button>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                 <button
                   onClick={handleAddToCart}
-                  className="flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl border border-[#35160E]/20 bg-[#FAF4E8] hover:bg-[#F4ECE0] text-[#35160E] text-xs font-semibold transition-all"
+                  className="flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl border border-[#2C5E3B]/35 bg-[#FAF4E8] hover:bg-[#2C5E3B] hover:text-[#FAF4E8] hover:border-[#2C5E3B] text-[#2C5E3B] text-xs font-semibold transition-all"
                 >
                   {addedNotice ? (
                     <>
-                      <Check className="w-3.5 h-3.5 text-emerald-700" />
-                      <span className="text-emerald-700">{t.hero.addedToBag}</span>
+                      <Check className="w-3.5 h-3.5" />
+                      <span>{t.hero.addedToBag}</span>
                     </>
                   ) : (
                     <>
@@ -379,7 +414,7 @@ export function LuxuryHero() {
 
                 <button
                   onClick={() => setIsCartOpen(true)}
-                  className="flex items-center justify-center gap-1.5 py-2.5 px-4 rounded-xl bg-[#F4ECE0] border border-[#E7DAC8] hover:border-[#6B1713]/40 text-[#6B1713] text-xs font-semibold transition-all"
+                  className="flex items-center justify-center gap-1.5 py-2.5 px-4 rounded-xl bg-[#EBF2EC]/75 border border-[#2C5E3B]/30 hover:bg-[#2C5E3B] hover:text-[#FAF4E8] hover:border-[#2C5E3B] text-[#2C5E3B] text-xs font-semibold transition-all"
                 >
                   <span>{t.hero.reviewBag}</span>
                   <ArrowRight className="w-3.5 h-3.5" />
@@ -387,13 +422,24 @@ export function LuxuryHero() {
               </div>
 
               <div className="flex items-center justify-center gap-1.5 text-[11px] text-[#35160E]/60 pt-1">
-                <ShieldCheck className="w-3.5 h-3.5 text-emerald-700" />
+                <ShieldCheck className="w-3.5 h-3.5 text-[#2C5E3B]" />
                 <span>{t.hero.zeroSignup}</span>
               </div>
             </div>
           </div>
         </div>
       </div>
+
+      {/* Macro Inspection Lightbox for Hero Platter */}
+      <ProductMacroLightbox
+        isOpen={lightboxOpen}
+        onClose={() => setLightboxOpen(false)}
+        images={currentSlides}
+        initialIndex={viewMode === 'secondary' && currentSlides.length > 1 ? 1 : 0}
+        productName={currentSpice.name}
+        packaging={currentSpice.packaging}
+        origin={currentSpice.origin}
+      />
     </section>
   );
 }

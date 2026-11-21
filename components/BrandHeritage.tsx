@@ -85,10 +85,10 @@ export function BrandHeritage() {
             className="lg:col-span-5 space-y-6"
           >
             <div>
-              <span className="text-xs uppercase tracking-widest text-[#6B1713] font-bold font-cinzel block mb-2">
+              <span className="text-xs uppercase tracking-widest text-[#6B1713] font-bold font-montserrat block mb-2">
                 {t.heritage.kicker}
               </span>
-              <h2 className="font-cinzel text-3xl sm:text-4xl lg:text-5xl font-bold text-[#35160E] tracking-tight leading-tight">
+              <h2 className="font-montserrat text-3xl sm:text-4xl lg:text-5xl font-bold text-[#35160E] tracking-tight leading-tight">
                 {t.heritage.title}
               </h2>
               <p className="text-sm sm:text-base text-[#35160E]/80 leading-relaxed mt-4">
@@ -107,7 +107,7 @@ export function BrandHeritage() {
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: 0.1 }}
               >
-                <span className="block font-cinzel text-2xl sm:text-3xl font-bold text-[#6B1713]">100%</span>
+                <span className="block font-montserrat text-2xl sm:text-3xl font-bold text-[#6B1713]">100%</span>
                 <span className="text-xs text-[#35160E]/70 font-medium">{t.heritage.metric1Label}</span>
               </motion.div>
               <motion.div
@@ -116,7 +116,7 @@ export function BrandHeritage() {
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: 0.2 }}
               >
-                <span className="block font-cinzel text-2xl sm:text-3xl font-bold text-[#6B1713]">0%</span>
+                <span className="block font-montserrat text-2xl sm:text-3xl font-bold text-[#6B1713]">0%</span>
                 <span className="text-xs text-[#35160E]/70 font-medium">{t.heritage.metric2Label}</span>
               </motion.div>
               <motion.div
@@ -125,7 +125,7 @@ export function BrandHeritage() {
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: 0.3 }}
               >
-                <span className="block font-cinzel text-2xl sm:text-3xl font-bold text-[#6B1713]">&lt;24h</span>
+                <span className="block font-montserrat text-2xl sm:text-3xl font-bold text-[#6B1713]">&lt;24h</span>
                 <span className="text-xs text-[#35160E]/70 font-medium">{t.heritage.metric3Label}</span>
               </motion.div>
             </div>
@@ -201,10 +201,10 @@ export function BrandHeritage() {
 
               {/* Banner Text Overlay */}
               <div className="absolute bottom-0 left-0 right-0 z-10 p-6 sm:p-8 text-[#FAF4E8]">
-                <span className="text-xs uppercase tracking-widest font-semibold block text-[#FAF4E8]/85 font-cinzel mb-1">
+                <span className="text-xs uppercase tracking-widest font-semibold block text-[#FAF4E8]/85 font-montserrat mb-1">
                   {t.heritage.bannerSub}
                 </span>
-                <h3 className="font-cinzel text-xl sm:text-2xl lg:text-3xl font-bold leading-snug">
+                <h3 className="font-montserrat text-xl sm:text-2xl lg:text-3xl font-bold leading-snug">
                   {t.heritage.bannerTitle}
                 </h3>
               </div>
@@ -226,18 +226,18 @@ export function BrandHeritage() {
                       damping: 20,
                       delay: 0.25 + idx * 0.15,
                     }}
-                    className="p-4 rounded-2xl bg-[#F4ECE0] border border-[#E7DAC8] hover:border-[#6B1713]/40 transition-all hover:bg-[#FAF4E8] group shadow-xs"
+                    className="p-4 rounded-2xl bg-[#F4ECE0] border border-[#E7DAC8] hover:border-[#2C5E3B]/45 transition-all hover:bg-[#EBF2EC]/45 group shadow-xs"
                   >
                     <div className="flex items-center justify-between mb-2">
-                      <div className="w-8 h-8 rounded-xl bg-[#FAF4E8] border border-[#E7DAC8] flex items-center justify-center text-[#6B1713] group-hover:bg-[#6B1713] group-hover:text-[#FAF4E8] transition-colors shadow-xs">
+                      <div className="w-8 h-8 rounded-xl bg-[#FAF4E8] border border-[#E7DAC8] flex items-center justify-center text-[#2C5E3B] group-hover:bg-[#2C5E3B] group-hover:text-[#FAF4E8] transition-colors shadow-xs">
                         <StepIcon className="w-4 h-4" />
                       </div>
-                      <span className="font-cinzel text-xs font-bold text-[#6B1713]/60">
+                      <span className="font-montserrat text-xs font-bold text-[#2C5E3B]/70">
                         {step.num}
                       </span>
                     </div>
 
-                    <h4 className="font-cinzel text-xs sm:text-sm font-bold text-[#35160E] leading-snug mb-1">
+                    <h4 className="font-montserrat text-xs sm:text-sm font-bold text-[#35160E] group-hover:text-[#2C5E3B] transition-colors leading-snug mb-1">
                       {step.title}
                     </h4>
                     <p className="text-[11px] text-[#35160E]/70 leading-relaxed">
@@ -260,10 +260,10 @@ export function BrandHeritage() {
           className="bg-[#F4ECE0] rounded-3xl p-6 sm:p-12 border border-[#E7DAC8]"
         >
           <div className="max-w-3xl mx-auto text-center mb-8">
-            <span className="text-xs uppercase tracking-widest text-[#6B1713] font-bold font-cinzel block mb-2">
+            <span className="text-xs uppercase tracking-widest text-[#6B1713] font-bold font-montserrat block mb-2">
               {t.heritage.b2bKicker}
             </span>
-            <h3 className="font-cinzel text-2xl sm:text-3xl font-bold text-[#35160E]">
+            <h3 className="font-montserrat text-2xl sm:text-3xl font-bold text-[#35160E]">
               {t.heritage.b2bTitle}
             </h3>
             <p className="mt-2 text-sm text-[#35160E]/80">
@@ -278,7 +278,7 @@ export function BrandHeritage() {
             <div>
               <label
                 htmlFor="b2b-commodity"
-                className="block text-xs font-semibold uppercase tracking-wider text-[#35160E] mb-2 font-cinzel"
+                className="block text-xs font-semibold uppercase tracking-wider text-[#35160E] mb-2 font-montserrat"
               >
                 {t.heritage.b2bSelectLabel}
               </label>
